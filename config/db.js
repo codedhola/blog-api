@@ -1,22 +1,18 @@
-const mongoose = require("mongoose")
-const app = require("../app")
+const pg = require("pg").Client
+require("dotenv").config({path: "./config/config.env"})
 
-const connectionParams = {
-   useNewUrlParser: true,
-   useUnifiedTopology: true 
-}
-const PORT = process.env.PORT || 3000
-async function Connection(){
-   try{
 
-      await mongoose.connect(process.env.MONGOOSE_CONNECTION_STRING, connectionParams)
-      
-      app.listen(PORT, () => {
-       console.log(`Database Connection successful... server running on port ${PORT}`)
-      })
-   }catch(err){
-      console.log(err);
-   }
-}
+const Client = new pg({
+   host: "localhost",
+   port: process.env.DB_PORT,
+   user: process.env.DB_USER,
+   password: process.env.DB_PASSWORD,
+   database: process.env.DB_NAME,
+})
 
-module.exports = Connection
+module.exports = {
+   DB: (text, params, callback) => {
+     return pool.Client(text, params, callback)
+   },
+   Client
+ }

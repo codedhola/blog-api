@@ -1,4 +1,14 @@
-require("dotenv").config({path: "./config/config.env"})
-const Connection = require("./config/db")
+const Client = require("./config/db")
+const app = require("./app")
 
-Connection()
+Client.connect((err) => {
+    if (err) {
+      console.error('connection error', err.stack)
+      return
+    }
+ 
+    app.listen(process.env.PORT, () => {
+       console.log(`App connected to database running on port ${process.env.PORT}`)
+    })
+  })
+ 
