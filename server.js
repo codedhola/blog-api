@@ -1,4 +1,4 @@
-const Client = require("./config/db")
+const {Client} = require("./config/db")
 const app = require("./app")
 
 Client.connect((err) => {

@@ -11,8 +11,5 @@ const Client = new pg({
 })
 
 module.exports = {
-   DB: (text, params, callback) => {
-     return pool.Client(text, params, callback)
-   },
    Client
  }
