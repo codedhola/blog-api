@@ -1,9 +1,9 @@
 // USER QUERIES
-const getAllUser = `SELECT * FROM users`;
 
-const createUser = `INSERT INTO users(email, password, is_admin, username VALUES($1, S2, $3, $4);`
-
-module.exports = {
-    getAllUser,
-    createUser
+const userQueries = {
+    getAllUser: `SELECT * FROM users;`,
+    createUser: `INSERT INTO users(email, password, username) VALUES($1, $2, $3) RETURNING *;`,
+    checkEmail: `SELECT email FROM users WHERE email = $1;`
 }
+
+module.exports = userQueries

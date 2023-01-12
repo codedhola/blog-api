@@ -1,6 +1,8 @@
 const express = require("express")
 const userRoutes = require("./routes/userRoute")
 const blogRoutes = require("./routes/blogRoute")
+const HandleError = require("./utils/handleError")
+const errorConfig = require("./config/errorConfig")
 const app = express()
 
 app.use(express.json())
@@ -14,17 +16,6 @@ app.all("*", (req, res, next) => {
     next(err);
 })
 
-app.use((err, req, res, next) => {
-    err.statusCode = err.statusCode || 500;
-    err.status = err.status || "Error"
-
-    return res.status(err.statusCode).json({
-        status: err.status,
-        error: err,
-        message: err.message,
-        stack: err.stack
-      });
-
-})
+app.use(errorConfig)
 
 module.exports = app
