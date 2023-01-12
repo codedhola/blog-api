@@ -4,7 +4,7 @@ const userQuery = require("./../database/queries/userQueries")
 const getUsers = async (req, res, next) => {
     try{
         const response = await DB.query(userQuery.getAllUser);
-        console.log(response)
+        console.log(response.rows)
         res.status(200).json({ 
             status: "success",
             message: "successful"
