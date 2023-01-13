@@ -1,7 +1,8 @@
 const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
 const HandleError = require("../utils/handleError")
+const { signToken } = require("./../utils/jwtToken")
 const userQueries = require("./../database/queries/userQueries")
+require("dotenv").config()
 const { Client } = require("./../config/db")
 
 
@@ -13,17 +14,27 @@ const signUp = async (req, res, next) => {
 
         // CHECK IF EMAIL DOES NOT EXIST IN DATABASE
         const checkMail = await Client.query(userQueries.checkEmail, [email])
-        
         if(checkMail.rows.length) return next(new HandleError("Email Already exist", 400))
+
         // ENCRYPT PASSWORD
-        const newUser = await Client.query(userQueries.createUser, [email, password, username])
+        const salt = await bcrypt.genSalt(Number(process.env.GENSALT))
+        const hashPassword = await bcrypt.hash(password, salt)
+        
         // SAVE TO DATABASE
-        console.log(newUser.rows)
+        const userQuery = await Client.query(userQueries.createUser, [email, hashPassword, username])
+        const newUser = userQuery.rows[0]
+
+        // SIGN TOKEN
+        const token = await signToken(newUser)
+        res.cookie("jwt", token, {  expires: new Date(Date.now() + 60 * 24 * 60 * 1000), httpOnly: true })
+        
         // SEND TOKEN TO CLIENT
         res.status(201).json({
             status: "Success",
             data: {
-                data: email, username
+                email,
+                username,
+                token
             }
         })
     }catch(err){
