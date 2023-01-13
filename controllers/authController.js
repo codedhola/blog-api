@@ -1,7 +1,8 @@
 const bcrypt = require("bcrypt")
 const HandleError = require("../utils/handleError")
-const { signToken } = require("./../utils/jwtToken")
+const { signToken, verifyToken } = require("./../utils/jwtToken")
 const userQueries = require("./../database/queries/userQueries")
+const { emailValidator } = require("./../utils/validator")
 require("dotenv").config()
 const { Client } = require("./../config/db")
 
@@ -11,11 +12,15 @@ const signUp = async (req, res, next) => {
         // GET REQUIRED DATA FROM CLIENT AND CHECK IF VALID
         const { email, password, username } = req.body
         if(!email || !password || !username) return next(new HandleError("You must specify 'Email' , 'Password' and 'username'", 400))
+        
+        // VALIDATE EMAIL
+        const validEmail = emailValidator(email)
+        if(!validEmail) return next(new HandleError("Invalid email provided", 400))
 
         // CHECK IF EMAIL DOES NOT EXIST IN DATABASE
         const checkMail = await Client.query(userQueries.checkEmail, [email])
         if(checkMail.rows.length) return next(new HandleError("Email Already exist", 400))
-
+        password
         // ENCRYPT PASSWORD
         const salt = await bcrypt.genSalt(Number(process.env.GENSALT))
         const hashPassword = await bcrypt.hash(password, salt)
@@ -27,7 +32,7 @@ const signUp = async (req, res, next) => {
         // SIGN TOKEN
         const token = await signToken(newUser)
         res.cookie("jwt", token, {  expires: new Date(Date.now() + 60 * 24 * 60 * 1000), httpOnly: true })
-        
+
         // SEND TOKEN TO CLIENT
         res.status(201).json({
             status: "Success",
@@ -43,7 +48,34 @@ const signUp = async (req, res, next) => {
     }
 }
 
+const login = async (req, res, next) => {
+    try{
+        // GET THE LOGIN DETAILS
+        const { email, password } = req.body
+        if(!email || !password) return next(new HandleError("'Email' and 'Password' required", 400))    
+
+        const checkMail = await Client.query(userQueries.checkEmail, [email])
+
+        if(!checkMail.rows.length || !(await bcrypt.compare(password, checkMail.rows[0].password))) return next(new HandleError("Incorrect email or password", 400))
+        
+        // SIGN TOKEN
+        const token = await signToken(checkMail.rows[0].user_id)
+        
+        res.status(200).json({
+            status: "Suceess",
+            data: {
+                message: "Logged in Succesfully",
+                token
+            }
+        })
+    }catch(err){
+        console.log(err)
+        next(new HandleError(err, 400))
+    }
+}
+
 
 module.exports = {
-    signUp
+    signUp,
+    login
 }
