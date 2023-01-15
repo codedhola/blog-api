@@ -15,15 +15,15 @@ const enumState= `CREATE TYPE state AS ENUM('draft', 'published');`
 const createTableBlog = `CREATE TABLE blog(
     blog_id uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     title VARCHAR(75) NOT NULL,
-    description VARCHAR(75) NOT NULL,
     body VARCHAR(255) NOT NULL,
     tags VARCHAR(100),
-    authour VARCHAR(75) NOT NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     state STATE DEFAULT 'draft',
     read_count INT DEFAULT 1,
     reading_time INT, 
-    slug VARCHAR(100) NOT NULL
+    slug VARCHAR(100) NOT NULL,
+    authour uuid NOT NULL,
+    FOREIGN KEY(authour) REFERRENCES user(user_id)
 );
 `
 

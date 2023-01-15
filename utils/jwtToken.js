@@ -6,7 +6,6 @@ const signToken = async (userID) => {
 }
 
 const verifyToken = async (token) => {
-    console.log(process.env.JWT_SECRET)
     return await promisify(jwt.verify)(token, process.env.JWT_SECRET)
 }
 

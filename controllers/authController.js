@@ -59,7 +59,7 @@ const login = async (req, res, next) => {
         if(!checkMail.rows.length || !(await bcrypt.compare(password, checkMail.rows[0].password))) return next(new HandleError("Incorrect email or password", 400))
         
         // SIGN TOKEN
-        const token = await signToken(checkMail.rows[0].user_id)
+        const token = await signToken(checkMail.rows[0])
         
         res.status(200).json({
             status: "Suceess",
@@ -74,8 +74,33 @@ const login = async (req, res, next) => {
     }
 }
 
+const isLoggedIn = async (req, res, next) => {
+    try{
+        // CHECK IF TOKEN IS AVAILABLE
+        let token;
+        if(req.headers.authorization.startsWith("Bearer")){
+            token = req.headers.authorization.split(" ")[1]
+        }
+
+        // RETURN ERROR IF NOT LOGGED IN 
+        if(!token) return next(new HandleError("Please log in to access this page", 401))
+    
+        // DESTRUCTURE JWT TOKEN 
+        const user = await verifyToken(token)
+        if(!user) return next(new HandleError("Invalid token, please login", 400))
+    
+        // TRANSFER TOKEN ID TO NEXT FUNCTION 
+        console.log(user)
+        req.user = user
+        next()
+    }catch(err){
+        console.log(err)
+    }
+}
+
 
 module.exports = {
     signUp,
-    login
+    login,
+    isLoggedIn
 }

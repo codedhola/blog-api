@@ -7,7 +7,9 @@ const getUsers = async (req, res, next) => {
         console.log(response.rows)
         res.status(200).json({ 
             status: "success",
-            message: "successful"
+            data: {
+                data: response.rows
+            }
         })
     }catch(err){
         console.log(err)
