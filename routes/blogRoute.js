@@ -6,4 +6,5 @@ router.get("/", blogController.getBlogs)
 
 router.post("/", auth.isLoggedIn, blogController.createBlog)
 
+
 module.exports = router

@@ -95,6 +95,7 @@ const isLoggedIn = async (req, res, next) => {
         next()
     }catch(err){
         console.log(err)
+        next(new HandleError("please login", 400))
     }
 }
 
