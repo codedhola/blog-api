@@ -36,11 +36,12 @@ const signUp = async (req, res, next) => {
         // SEND TOKEN TO CLIENT
         res.status(201).json({
             status: "Success",
-            data: {
+            response: {
+                data: {
                 email,
                 username,
                 token
-            }
+            }}
         })
     }catch(err){
         console.log(err)
@@ -63,7 +64,7 @@ const login = async (req, res, next) => {
         
         res.status(200).json({
             status: "Suceess",
-            data: {
+            response: {
                 message: "Logged in Succesfully",
                 token
             }
@@ -74,7 +75,7 @@ const login = async (req, res, next) => {
     }
 }
 
-const isLoggedIn = async (req, res, next) => {
+const protect = async (req, res, next) => {
     try{
         // CHECK IF TOKEN IS AVAILABLE
         let token;
@@ -90,18 +91,29 @@ const isLoggedIn = async (req, res, next) => {
         if(!user) return next(new HandleError("Invalid token, please login", 400))
     
         // TRANSFER TOKEN ID TO NEXT FUNCTION 
-        console.log(user)
-        req.user = user
+        req.userStamp = user
         next()
     }catch(err){
         console.log(err)
-        next(new HandleError("please login", 400))
+        next(new HandleError(err, 400))
     }
+}
+
+const verifyRole = (role) => async (req, res, next) => {
+    // FETCH USERS DATA
+    const user = await Client.query(userQueries.getAUser, [req.userStamp.userID])
+
+    // VERIFY IS USER IS ALLOWED
+    if(role !== user.rows[0].is_admin) return next(new HandleError("Not allowed to perform this operation", 403))
+
+    req.user = user.rows[0]
+    next()
 }
 
 
 module.exports = {
     signUp,
     login,
-    isLoggedIn
+    protect,
+    verifyRole
 }

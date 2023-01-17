@@ -4,8 +4,8 @@ const auth = require("./../controllers/authController")
 
 router.get("/", blogController.getBlogs)
 
-router.post("/", auth.isLoggedIn, blogController.createBlog)
+router.post("/", auth.protect, blogController.createBlog)
 
-router.delete("/:id", auth.isLoggedIn, blogController.deleteBlog)
+router.delete("/:id", auth.protect, blogController.deleteBlog)
 
 module.exports = router
