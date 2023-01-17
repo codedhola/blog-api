@@ -60,7 +60,8 @@ const editBlog = async (req, res, next) => {
     const data = [title, body, state, req.params.id]
     try{
         const blog = await Client.query(blogQuery.editBlog, [data])
-        
+
+        if(!blog.rows.length) return next(new HandleError("Blog doesn't Exist", 404))
         res.status(201).json({
             status: "Success",
             data:{ 
