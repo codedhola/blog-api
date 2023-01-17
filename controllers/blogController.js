@@ -15,6 +15,22 @@ const getBlogs = async (req, res, next) => {
     })
 }
 
+const getABlog = async (req, res, next) => {
+    const id = req.params.id;
+    try{
+        const blog = await Client.query(blogQuery.getABlog, [id])
+        
+        res.status(200).json({
+            status: "Success",
+            data: {
+                response: blog.rows}
+        })
+    }catch(err){
+        console.log(err)
+        next(new HandleError(err, 500))
+    }
+}
+
 const createBlog = async (req, res, next) => {
     try{
         // GET BODY DATA => { title, body , slug, authour } 
@@ -55,6 +71,7 @@ const deleteBlog = async (req, res, next) => {
 
 module.exports = {
     getBlogs,
+    getABlog,
     createBlog,
     deleteBlog
 }
