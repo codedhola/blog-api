@@ -20,6 +20,7 @@ const getABlog = async (req, res, next) => {
     try{
         const blog = await Client.query(blogQuery.getABlog, [id])
         
+        if(!blog.rows.length) return next(new HandleError("Blog doesn't Exist", 404))
         res.status(200).json({
             status: "Success",
             data: {
