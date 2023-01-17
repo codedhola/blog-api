@@ -55,6 +55,24 @@ const createBlog = async (req, res, next) => {
     }
 }
 
+const editBlog = async (req, res, next) => {
+    const { title, body , state } = req.body
+    const data = [title, body, state, req.params.id]
+    try{
+        const blog = await Client.query(blogQuery.editBlog, [data])
+        
+        res.status(201).json({
+            status: "Success",
+            data:{ 
+                response: blog.rows
+            }
+        })
+    }catch(err){
+        console.log(err)
+        next(new HandleError(err, 500))
+    }
+}
+
 const deleteBlog = async (req, res, next) => {
     try {
         const id = req.params.id;
@@ -74,5 +92,6 @@ module.exports = {
     getBlogs,
     getABlog,
     createBlog,
+    editBlog,
     deleteBlog
 }
