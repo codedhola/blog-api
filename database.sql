@@ -23,5 +23,5 @@ CREATE TABLE blog(
     created_at TIMESTAMP DEFAULT now(),
     slug VARCHAR(100) NOT NULL,
     author_id UUID NOT NULL,
-    FOREIGN KEY(author_id) REFERENCES users(id)
+    FOREIGN KEY(author_id) REFERENCES users(user_id)
 );
