@@ -10,8 +10,8 @@ const { Client } = require("./../config/db")
 const signUp = async (req, res, next) => {
     try{
         // GET REQUIRED DATA FROM CLIENT AND CHECK IF VALID
-        const { email, password, username } = req.body
-        if(!email || !password || !username) return next(new HandleError("You must specify 'Email' , 'Password' and 'username'", 400))
+        const { firstName, lastName, email, password, gender } = req.body
+        if(!email || !password || !firstName) return next(new HandleError("You must specify 'Email' , 'Password' and 'firtname'", 400))
         
         // VALIDATE EMAIL
         const validEmail = emailValidator(email)
@@ -26,7 +26,7 @@ const signUp = async (req, res, next) => {
         const hashPassword = await bcrypt.hash(password, salt)
         
         // SAVE TO DATABASE
-        const userQuery = await Client.query(userQueries.createUser, [email, hashPassword, username])
+        const userQuery = await Client.query(userQueries.createUser, [firstName, lastName, email, hashPassword, gender])
         const newUser = userQuery.rows[0]
 
         // SIGN TOKEN
