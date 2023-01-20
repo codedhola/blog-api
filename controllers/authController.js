@@ -11,7 +11,7 @@ const signUp = async (req, res, next) => {
     try{
         // GET REQUIRED DATA FROM CLIENT AND CHECK IF VALID
         const { firstName, lastName, email, password, gender } = req.body
-        if(!email || !password || !firstName) return next(new HandleError("You must specify 'Email' , 'Password' and 'firtname'", 400))
+        if(!email || !password || !firstName) return next(new HandleError("You must specify 'Email' , 'Password' and 'firstname'", 400))
         
         // VALIDATE EMAIL
         const validEmail = emailValidator(email)
@@ -61,7 +61,8 @@ const login = async (req, res, next) => {
         
         // SIGN TOKEN
         const token = await signToken(checkMail.rows[0])
-        
+        res.cookie("jwt", token, {  expires: new Date(Date.now() + 60 * 24 * 60 * 1000), httpOnly: true })
+
         res.status(200).json({
             status: "Suceess",
             response: {
