@@ -24,7 +24,7 @@ const getABlog = async (req, res, next) => {
         res.status(200).json({
             status: "Success",
             data: {
-                response: blog.rows}
+                response: blog.rows[0]}
         })
     }catch(err){
         console.log(err)
@@ -35,10 +35,10 @@ const getABlog = async (req, res, next) => {
 const createBlog = async (req, res, next) => {
     try{
         // GET BODY DATA => { title, body , slug, authour } 
-        const { title, body } = req.body
+        const { title, description, body } = req.body
         const slugTitle = slug(title)
         
-        const data = [title, body, slugTitle, req.userStamp.userID]
+        const data = [title, description, body, slugTitle, req.userStamp.userID]
         // ADD DATA TO DATABASE
         const response = await Client.query(blogQuery.createBlog, data)
 
