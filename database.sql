@@ -3,7 +3,7 @@ CREATE DATABASE blog_api;
 CREATE EXTENSION "uuid-ossp";
 
 CREATE TABLE users(
-    id UUID DEFAULT UUID_GENERATE_V4() PRIMARY KEY,
+    user_id UUID DEFAULT UUID_GENERATE_V4() PRIMARY KEY,
     first_name VARCHAR(25) NOT NULL,
     last_name VARCHAR(25) NOT NULL,
     email VARCHAR(50) NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE users(
 );
 
 CREATE TABLE blog(
-    id UUID DEFAULT UUID_GENERATE_V4() PRIMARY KEY,
+    blog_id UUID DEFAULT UUID_GENERATE_V4() PRIMARY KEY,
     title VARCHAR(75) NOT NULL,
     description VARCHAR(100),
     body VARCHAR(250) NOT NULL,
@@ -23,5 +23,5 @@ CREATE TABLE blog(
     created_at TIMESTAMP DEFAULT now(),
     slug VARCHAR(100) NOT NULL,
     author_id UUID NOT NULL,
-    FOREIGN KEY(author_id) REFERENCES users(id)
+    FOREIGN KEY(author_id) REFERENCES users(user_id)
 );
