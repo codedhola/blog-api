@@ -1,3 +1,4 @@
+require("dotenv").config()
 const {Client} = require("./config/db")
 const app = require("./app")
 
