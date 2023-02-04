@@ -8,10 +8,10 @@ Client.connect((err) => {
       return
     }
  
-    app.listen(process.env.PORT, () => {
-       console.log(`App connected to database running on port ${process.env.PORT}`)
-    })
   })
- 
-
+  
+  
+  app.listen(process.env.PORT, () => {
+     console.log(`App connected to database running on port ${process.env.PORT}`)
+  })
   

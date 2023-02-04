@@ -4,9 +4,9 @@
   "description": "This is a blog Api project",
   "main": "server.js",
   "scripts": {
-    "test": "jest --watchAll",
-    "start": " node src/server.js ",
-    "dev": "NODE_ENV=development nodemon src/server.js",
+    "test": "jest ",
+    "start": " node src/server ",
+    "dev": "NODE_ENV=development nodemon src/server",
     "migrate": "node-pg-migrate"
   },
   "keywords": [

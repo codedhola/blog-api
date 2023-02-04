@@ -1,4 +1,4 @@
-const pg = require("pg").Client
+const pg = require("pg").Pool
 const {
    DB_REMOTE_HOST, DB_REMOTE_USERNAME, DB_REMOTE_DATABASE,
    DB_REMOTE_PASSWORD

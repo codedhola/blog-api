@@ -8,7 +8,8 @@ const getBlogs = async (req, res, next) => {
 
     //  GET ALL BLOGS
     const data = await Client.query(blogQuery.getBlogs)
-    res.status(200).json({
+
+    return res.status(200).json({
         status: "Success",
         data: {
             response: data.rows}
@@ -21,7 +22,7 @@ const getABlog = async (req, res, next) => {
         const blog = await Client.query(blogQuery.getABlog, [id])
         
         if(!blog.rows.length) return next(new HandleError("Blog doesn't Exist", 404))
-        res.status(200).json({
+        return res.status(200).json({
             status: "Success",
             data: {
                 response: blog.rows[0]}
@@ -42,7 +43,7 @@ const createBlog = async (req, res, next) => {
         // ADD DATA TO DATABASE
         const response = await Client.query(blogQuery.createBlog, data)
 
-        res.status(201).json({
+        return res.status(201).json({
             status: "Success",
             data:{ 
                 response: response.rows
@@ -62,7 +63,7 @@ const editBlog = async (req, res, next) => {
         const blog = await Client.query(blogQuery.editBlog, [data])
 
         if(!blog.rows.length) return next(new HandleError("Blog doesn't Exist", 404))
-        res.status(201).json({
+        return res.status(201).json({
             status: "Success",
             data:{ 
                 response: blog.rows
@@ -79,7 +80,7 @@ const deleteBlog = async (req, res, next) => {
         const id = req.params.id;
         await Client.query(blogQuery.deleteBlog, [id])
 
-        res.status(204).json({
+        return res.status(204).json({
             status: "Success"
         })
 
