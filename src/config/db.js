@@ -5,7 +5,7 @@ const {
 } = process.env
 let Client;
 
-if(process.env.NODE_ENV){
+if(process.env.NODE_ENV === "development"){
    Client = new pg({
       host: "localhost",
       port: process.env.DB_PORT,
