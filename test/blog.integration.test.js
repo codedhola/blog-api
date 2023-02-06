@@ -1,13 +1,13 @@
 const request = require("supertest")
 const pg = require("pg").Client
 require("dotenv").config()
-console.log(process.env.DB_NAME)
 
 describe("Blogs Test", () => {
   
   let app
   let Client
-  beforeEach(function () {
+  app = require('../src/app')    
+  beforeAll(function () {
     // Create a new pool with a connection limit of 1
     Client = new pg({
       host: "localhost",
@@ -19,14 +19,13 @@ describe("Blogs Test", () => {
    })
     
     // It's important to import the app after mocking the database connection
-    app = require('../src/app')    
   })
   // Optionally we could insert fake data before each test, but in this case it's not needed
   // beforeEach('Insert fake data', async function () {
   //   await client.query('INSERT INTO pg_temp.note (name, content) VALUES ("a_note", "some_content")')
   // })
 
-  afterEach(async function () {
+  afterAll(async function () {
     Client.end()
   })
 
