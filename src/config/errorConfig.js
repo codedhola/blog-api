@@ -1,11 +1,11 @@
+const HandleError = require("../utils/handleError");
 
+const jwtExpired = () => {
+  return new HandleError("Please Login to perform this operation", 401)
+}
 
-
-const jwtExpired = (err, res) => {
-  return res.status(err.statusCode).json({
-    status: err.status,
-    message: "Please login to continue"
-  })
+const JwtError = () => {
+  return new HandleError("Token Invalid, please login again", 400)
 }
 
 
@@ -18,7 +18,7 @@ const production = (err, res) => {
 }
   return res.status(500).json({
     status: 'error',
-    message: 'Something went very wrong!'
+    message: 'Something went wrong! Please check back'
 });
 }
 module.exports = (err, req, res, next) => {
@@ -36,9 +36,9 @@ module.exports = (err, req, res, next) => {
   }else{
     let error = {...err}
     
-    if(error.name === "JsonWebTokenError") error = handleJwtError()
-    if(error.name === "TokenExpiredError") error = handleJwtExpires()
+    if(error.name === "JsonWebTokenError") error = JwtError()
+    if(error.name === "TokenExpiredError") error = jwtExpired()
 
-    production(error, req, res)
+    production(error, res)
   }
 }
