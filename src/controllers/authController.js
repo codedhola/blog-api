@@ -96,7 +96,7 @@ const protect = async (req, res, next) => {
         next()
     }catch(err){
         console.log(err)
-        next(new HandleError(err, 400))
+        next(err, 500)
     }
 }
 

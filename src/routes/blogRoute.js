@@ -6,9 +6,9 @@ router.get("/", blogController.getBlogs)
 
 router.get("/:id", blogController.getABlog)
 
-router.post("/", auth.protect, blogController.createBlog)
+router.post("/", auth.protect, auth.verifyRole(true), blogController.createBlog)
 
-router.put("/:id", blogController.editBlog)
+router.put("/:id", auth.protect, auth.verifyRole(true), blogController.editBlog)
 
 router.delete("/:id", auth.protect, auth.verifyRole(true), blogController.deleteBlog)
 
