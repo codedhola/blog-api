@@ -22,20 +22,48 @@ describe("Tests For the user endpoints", () => {
       Client.end()
     })
 
-    it("Registering a user in the database", async () => {
-        const res = await request(app).post("/api/v1/users/auth/sign-up").send({
-            "firstName": "coded",
-            "lastName": "Hola",
-            "email" : "codedhola@gmail.com",
+    it("Registering an existing user to database", async () => {
+      const {body, statusCode} = await request(app).post("/api/v1/users/auth/sign-up").send({
+          "firstName": "coded",
+          "lastName": "hola",
+          "email" : "codedhola@gmail.com",
+          "password": "developer",
+          "gender": "male"
+      })
+      
+      expect(statusCode).toEqual(400)
+        expect(body).toEqual(
+          Object({
+            status: "Fail",
+            // error: expect.any(Object)
+          })
+        )
+    })
+
+    it("Registering a new user to database", async () => {
+        const {body, statusCode} = await request(app).post("/api/v1/users/auth/sign-up").send({
+            "firstName": "Michael",
+            "lastName": "Scofied",
+            "email" : "mikschole@gmail.com",
             "password": "developer",
             "gender": "male"
         })
         
-          expect(res.statusCode).toEqual(400)
-          expect(res.body.status).toEqual("Fail")
-        //   expect(res.body.data).toHaveProperty("response")
-        //   expect(Array.isArray(res.body.data.response)).toBe(true)
+          expect(body).toEqual(
+            Object({
+              status: "Success",
+              response: {
+                data: {
+                  firstName: expect.any(String),
+                  lastName: expect.any(String),
+                  email: expect.any(String),
+                  password: expect.any(String),
+                  gender: expect.any(String),
+                  is_admin: expect.any(Boolean),
+                }
+              }
+            })
+          )
+          expect(statusCode).toEqual(201)
       })
-
-
 })

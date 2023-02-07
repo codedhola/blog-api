@@ -15,7 +15,7 @@ if(process.env.NODE_ENV === "development"){
    })
     
    
-}else{
+}else if(process.env.NODE_ENV === "production"){
    Client = new pg({
       host: DB_REMOTE_HOST,
       port: process.env.DB_PORT,
@@ -23,6 +23,14 @@ if(process.env.NODE_ENV === "development"){
       password: DB_REMOTE_PASSWORD,
       database: DB_REMOTE_DATABASE,
       ssl: true
+   })
+}else {
+   Client = new pg({
+      host: "localhost",
+      port: process.env.DB_PORT,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
    })
 }
 

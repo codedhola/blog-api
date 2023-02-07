@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "jest --watchAll",
-    "start": " node src/server ",
+    "start": "NODE_ENV=production node src/server ",
     "dev": "NODE_ENV=development nodemon src/server",
     "migrate": "node-pg-migrate"
   },

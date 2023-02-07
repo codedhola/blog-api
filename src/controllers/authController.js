@@ -36,11 +36,13 @@ const signUp = async (req, res, next) => {
         // SEND TOKEN TO CLIENT
         res.status(201).json({
             status: "Success",
+            token,
             response: {
                 data: {
                 email,
-                username,
-                token
+                firstName,
+                lastName,
+                roles,
             }}
         })
     }catch(err){
