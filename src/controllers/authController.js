@@ -107,7 +107,7 @@ const verifyRole = (role) => async (req, res, next) => {
     const user = await Client.query(userQueries.getAUser, [req.userStamp.userID])
 
     // VERIFY IS USER IS ALLOWED
-    if(role !== user.rows[0].is_admin) return next(new HandleError("Not allowed to perform this operation", 403))
+    if(role !== user.rows[0].roles) return next(new HandleError("Not allowed to perform this operation", 403))
 
     req.user = user.rows[0]
     next()
