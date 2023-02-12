@@ -1,5 +1,5 @@
 const query = {
-    getBlogs: `SELECT * FROM blog`,
+    getBlogs: `SELECT * FROM blog LIMIT $1 `,
     getABlog: `SELECT blog.title, blog.description, blog.body, blog.state, blog.tag, blog.read_time, blog.read_count, blog.created_at, blog.slug, users.first_name, users.gender
     FROM blog
     INNER JOIN users

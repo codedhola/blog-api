@@ -30,4 +30,4 @@ CREATE TABLE blog(
 
 
 
--- ALTER TABLE users ADD COLUMN roles VARCHAR(10) CHECK(roles IN('admin', 'users')) DEFAULT 'users';
+ALTER TABLE users ADD COLUMN roles VARCHAR(10) CHECK(roles IN('admin', 'users')) DEFAULT 'users';

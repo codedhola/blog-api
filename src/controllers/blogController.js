@@ -5,15 +5,24 @@ const blogQuery = require("./../database/queries/blogQueries")
 
 
 const getBlogs = async (req, res, next) => {
-
-    //  GET ALL BLOGS
-    const data = await Client.query(blogQuery.getBlogs)
-
-    return res.status(200).json({
-        status: "Success",
-        data: {
-            response: data.rows}
-    })
+    const {limit, page} = req.query
+    console.log(limit, page)
+    const pagination = [limit]
+    try{
+        //  GET ALL BLOGS
+        const data = await Client.query(blogQuery.getBlogs, pagination)
+        
+        
+        return res.status(200).json({
+            status: "Success",
+            results: data.rowCount,
+            response: {
+                data: data.rows}
+        })
+    }catch(err){
+        console.log(err)
+        next(new HandleError(err, 500))
+    }
 }
 
 const getABlog = async (req, res, next) => {
