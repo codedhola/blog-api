@@ -7,6 +7,12 @@ const app = express()
 
 app.use(express.json())
 
+app.get("/", (req, res) => { 
+    res.sendFile(`${__dirname}/public/index.html`)
+})
+app.get("/api/v1/", (req, res) => {
+    res.redirect("/")
+})
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/blogs", blogRoutes)
 

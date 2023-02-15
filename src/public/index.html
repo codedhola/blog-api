@@ -5,32 +5,61 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Blog API</title>
+    <style>
+        li {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
     <h1>Blog API Homepage</h1>
+    <p> API is LIVE view Docs <a href="">HERE</a></p>
     <h2>API Endpoints</h2>
     <h3> CRUD for Blog</h3>
     <ul>
         <li>GET => api/v1/blogs</li>
+        <p>get all blogs </p>
+        <hr>
         <li>GET => api/v1/blogs/:id</li>
-        <li>PUT => api/v1/blogs</li>
+        <p>Get a blog, This routes also gets the author details of the blog</p>
+        <hr>
+        <li>POST => api/v1/blogs</li>
+        <p>Create a new Blog, This route is protected!, only admin users can create a blog. This route accepts data's from users</p>
+        <p> Which are :=> { title, description and body }
+        </p>
+        <hr>
         <li>PATCH => api/v1/blogs/:id</li>
+        <p>Edit an existing Blog by providing it ID as a parameter and edit  it data { title, description or body }</p>
+        <hr>
         <li>DELETE => api/v1/blogs/:id</li>
+        <p>Delete a blog in this Endpoint by just providing it ID </p>
+        <hr>
     </ul>
     <h3>User Authentication</h3>
     <ul>
-        <li>POST => api/v1/users/sign-up</li><hr>
-        <li>POST => api/v1/users/login</li>
+        <li>POST => api/v1/users/auth/sign-up</li>
+        <p> 'firstName', 'lastName', 'email', 'gender' and 'password' must be provided in order to sign up as a user</p>
+        <hr>
+        <li>POST => api/v1/users/auth/login</li>
+        <p> 'Email' and 'password' While Signing up as a user must be used correctly in order to be logged in</p>
+        <hr>
     </ul>
 
 
 
-    <p> API is LIVE view Docs <a href="">HERE</a></p>
     <h3>Features</h3>
     <ul>
         <li>User Authentication => Sign up & Login</li>
         <li>Protected Routes</li>
-        <li></li>
+        <li>Admin Create blog, edit and delete blog</li>
+        <li>Read both published and draft blogs</li>
+        <li>Can search blog by title and tags using pagination</li>
     </ul>
+    <h3>More features To add </h3>
+    <li> User Reset password</li>
+    <li> User update password</li>
+    <li> User update profile</li>
+    <li> User Upload image</li>
+    <li> View only published blogs</li>
 </body>
 </html>
