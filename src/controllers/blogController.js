@@ -33,8 +33,8 @@ const getABlog = async (req, res, next) => {
         if(!blog.rows.length) return next(new HandleError("Blog doesn't Exist", 404))
         return res.status(200).json({
             status: "Success",
-            data: {
-                response: blog.rows[0]}
+            response: {
+                data: blog.rows[0]}
         })
     }catch(err){
         console.log(err)
@@ -54,8 +54,8 @@ const createBlog = async (req, res, next) => {
 
         return res.status(201).json({
             status: "Success",
-            data:{ 
-                response: response.rows
+            response:{ 
+                data: response.rows
             }
         })
         
@@ -72,10 +72,10 @@ const editBlog = async (req, res, next) => {
         const blog = await Client.query(blogQuery.editBlog, [data])
 
         if(!blog.rows.length) return next(new HandleError("Blog doesn't Exist", 404))
-        return res.status(201).json({
+        return res.status(200).json({
             status: "Success",
-            data:{ 
-                response: blog.rows
+            response:{ 
+                data: blog.rows
             }
         })
     }catch(err){
