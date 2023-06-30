@@ -12,8 +12,6 @@ const runTableUp = async (client) => {
     await client.query(createPassword_reset);
   } catch (err) {
     console.log(err);
-  } finally {
-    await client.end();
   }
 };
 

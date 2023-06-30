@@ -6,9 +6,9 @@ const createTableUser = `CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; CREATE TABL
     "email" VARCHAR(100) NOT NULL UNIQUE, 
     "username" VARCHAR(100) NOT NULL UNIQUE,
     "password" VARCHAR(200) NOT NULL, 
-    "phone" VARCHAR(20) NOT NULL, 
+    "phone" VARCHAR(20), 
     "address" VARCHAR(100), 
-    "roles" VARCHAR(50) CHECK (roles = 'admin' or roles = 'users'), 
+    "roles" VARCHAR(50) CHECK (roles = 'admin' or roles = 'users') DEFAULT 'users', 
     "active" BOOLEAN DEFAULT TRUE);`;
 
 const createTableBlog = `CREATE TABLE IF NOT EXISTS "blog"(
