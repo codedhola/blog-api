@@ -17,7 +17,7 @@ const createTableBlog = `CREATE TABLE IF NOT EXISTS "blog"(
     "body" VARCHAR(255) NOT NULL,
     "tags" VARCHAR(100),
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    "state" VARCHAR(50) DEFAULT 'draft',
+    "state" VARCHAR(50) CHECK(state = 'draft' or state = 'publish') DEFAULT 'draft',
     "read_count" INT DEFAULT 1,
     "reading_time" INT, 
     "slug" VARCHAR(100) NOT NULL,

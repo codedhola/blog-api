@@ -35,7 +35,7 @@ const getABlog = async (req, res, next) => {
             status: "Success",
             response: {
                 data: blog.rows[0]}
-        })
+         })
     }catch(err){
         console.log(err)
         next(new HandleError(err, 500))

@@ -139,9 +139,27 @@ const verifyRole = (role) => async (req, res, next) => {
   next();
 };
 
+const forgotpassword = async (req, res, next) => {
+  try {
+  } catch (err) {
+    console.log(err);
+    next(err, 500);
+  }
+};
+
+const resetpassword = async (req, res, next) => {
+  try {
+  } catch (err) {
+    console.log(err);
+    next(err, 500);
+  }
+};
+
 module.exports = {
   signUp,
   login,
   protect,
   verifyRole,
+  forgotpassword,
+  resetpassword,
 };
