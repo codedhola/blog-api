@@ -7,7 +7,7 @@ const password_query = {
 
   reset_password: `UPDATE users SET password = $1 WHERE user_id = $2 RETURNING *;`,
 
-  // deleteBlog: `DELETE FROM blog WHERE blog_id = $1;`,
+  delete_token: `DELETE FROM password_resets WHERE user_id = $1;`,
 };
 
 module.exports = password_query;
