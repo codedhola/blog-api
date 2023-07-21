@@ -193,15 +193,16 @@ const resetpassword = async (req, res, next) => {
       );
     const salt = await bcrypt.genSalt(Number(process.env.GENSALT));
     const hashPassword = await bcrypt.hash(req.body.password, salt);
-    const updatePassword = await Client.query(password_query.reset_password, [
+    await Client.query(password_query.reset_password, [
       hashPassword,
       user.rows[0].user_id,
     ]);
 
+    await Client.query(password_query.delete_token, [user.rows[0].user_id]);
+
     res.status(200).json({
       status: "success",
       data: "password reset successful",
-      // updatePassword,
     });
   } catch (err) {
     console.log(err);

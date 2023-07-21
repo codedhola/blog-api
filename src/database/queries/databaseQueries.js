@@ -14,7 +14,7 @@ const createTableUser = `CREATE EXTENSION IF NOT EXISTS "uuid-ossp"; CREATE TABL
 const createTableBlog = `CREATE TABLE IF NOT EXISTS "blog"(
     "blog_id" uuid PRIMARY KEY DEFAULT uuid_generate_v4(),
     "title" VARCHAR(75) NOT NULL,
-    "body" VARCHAR(255) NOT NULL,
+    "body" TEXT NOT NULL,
     "tags" VARCHAR(100),
     "created_at" TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     "state" VARCHAR(50) CHECK(state = 'draft' or state = 'publish') DEFAULT 'draft',
