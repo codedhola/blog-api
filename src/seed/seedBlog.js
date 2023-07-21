@@ -183,11 +183,8 @@ async function seed_blog(client) {
   try {
     await client.connect();
 
-    console.log("running...");
-
     const blog = await client.query(query.getBlogs, [10]);
 
-    console.log(blog);
     if (!blog.rows.length) {
       for (let i = 0; i < blogs.length; i++) {
         const { title, body, slug, author_id } = blogs[i];

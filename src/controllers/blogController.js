@@ -45,7 +45,6 @@ const getABlog = async (req, res, next) => {
 
 const createBlog = async (req, res, next) => {
   try {
-    // GET BODY DATA => { title, body , slug, authour }
     const { title, description, body } = req.body;
     const slugTitle = slug(title);
 
