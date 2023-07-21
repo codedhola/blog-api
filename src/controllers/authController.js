@@ -1,7 +1,8 @@
 const bcrypt = require("bcrypt");
 const HandleError = require("../utils/handleError");
-const { signToken, verifyToken } = require("./../utils/jwtToken");
+const { signToken, verifyToken, randomString } = require("./../utils/jwtToken");
 const userQueries = require("./../database/queries/userQueries");
+const password_query = require("./../database/queries/resetQueries");
 const { emailValidator } = require("./../utils/validator");
 require("dotenv").config();
 const { Client } = require("./../config/db");
@@ -140,7 +141,32 @@ const verifyRole = (role) => async (req, res, next) => {
 };
 
 const forgotpassword = async (req, res, next) => {
+  const email = req.body.email;
+
   try {
+    // CONFIRM IF EMAIL EXIST IN DATABASE
+    const checkMail = await Client.query(userQueries.checkEmail, [email]);
+
+    if (!checkMail.rows.length)
+      return next(new HandleError("Incorrect email", 400));
+
+    const { user_id } = checkMail.rows[0];
+    const token = randomString();
+    console.log(user_id, token);
+    // CREATE A TOKEN TO SAVE IN THE DATABASE AND SEND ROUTE TO EMAIL
+    const createToken = await Client.query(
+      password_query.create_password_reset,
+      [user_id, token]
+    );
+
+    const resetUrl = `${req.protocol}://${req.get(
+      "host"
+    )}/api/v1/users/auth/reset-password/${token}`;
+    res.status(200).json({
+      status: "success",
+      data: `"reset token is below`,
+      response: resetUrl,
+    });
   } catch (err) {
     console.log(err);
     next(err, 500);
@@ -149,6 +175,34 @@ const forgotpassword = async (req, res, next) => {
 
 const resetpassword = async (req, res, next) => {
   try {
+    const token = req.params.token;
+
+    const user_token = await Client.query(password_query.get_token, [token]);
+
+    if (!user_token.rows.length)
+      return next(
+        new HandleError("User Token not found or expired please try again", 400)
+      );
+
+    const user = await Client.query(userQueries.getAUser, [
+      user_token.rows[0].user_id,
+    ]);
+    if (!user.rows.length)
+      return next(
+        new HandleError("User Token not found or expired please try again", 400)
+      );
+    const salt = await bcrypt.genSalt(Number(process.env.GENSALT));
+    const hashPassword = await bcrypt.hash(req.body.password, salt);
+    const updatePassword = await Client.query(password_query.reset_password, [
+      hashPassword,
+      user.rows[0].user_id,
+    ]);
+
+    res.status(200).json({
+      status: "success",
+      data: "password reset successful",
+      // updatePassword,
+    });
   } catch (err) {
     console.log(err);
     next(err, 500);
